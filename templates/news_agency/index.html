@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - News Agency{% endblock %}
+
+{% block content %}
+  <div class="text-center">
+    <h1>Welcome to the News Agency</h1>
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <h5 class="card-title">Topics</h5>
+            <p class="card-text">{{ num_topics }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <h5 class="card-title">Newspapers</h5>
+            <p class="card-text">{{ num_newspapers }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <h5 class="card-title">Redactors</h5>
+            <p class="card-text">{{ num_redactors }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 class="mt-4">READ THE LATEST NEWS</h3>
+    <div class="list-group">
+      {% for news in news_list %}
+        <a href="#" class="list-group-item list-group-item-action">{{ news.title }} (from {{ news.published_date.date }})</a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
