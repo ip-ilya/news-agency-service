@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ topic.name }} - News Agency{% endblock %}
+
+{% block content %}
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <!-- Topic Header -->
+        <div class="jumbotron text-white bg-primary p-4 shadow-sm rounded">
+          <div style="text-align: center;"><h1 class="display-5">{{ topic.name }}</h1></div>
+          <p class="lead">{{ topic.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Newspapers -->
+    <div class="row mt-4">
+      <div class="col-md-8 mx-auto">
+        <h3 class="mb-3">Latest Related Newspapers</h3>
+        {% if topic.newspapers.all %}
+          <div class="row">
+            {% for newspaper in topic.newspapers.all %}
+              <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ newspaper.title }}</h5>
+                    <p class="card-text text-muted">Published on {{ newspaper.published_date }}</p>
+                    <a href="{% url 'news_agency:newspaper-detail' newspaper.pk %}"
+                       class="btn btn-outline-primary btn-sm">Read More</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">No newspapers found for this topic.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

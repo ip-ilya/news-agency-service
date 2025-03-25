@@ -41,3 +41,7 @@ class RedactorListView(generic.ListView):
 
 class NewspaperDetailView(generic.DetailView):
     model = Newspaper
+
+
+class TopicDetailView(generic.DetailView):
+    model = Topic
