@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
-
-{% block title %}Newspapers - News Agency{% endblock %}
-
+{% block title %}Newspapers{% endblock %}
 {% block content %}
-  <div style="text-align: center;"><h1>Newspapers</h1></div>
-  <div class="list-group">
+  <h2>Newspapers</h2>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for newspaper in newspaper_list %}
-      <a href="#" class="list-group-item list-group-item-action">{{ newspaper.title }}</a>
+      <tr>
+        <td><a href="#">{{ newspaper.title }}</a></td>
+        <td>{{ newspaper.published_date.date }}</td>
+      </tr>
     {% endfor %}
-  </div>
+    </tbody>
+  </table>
 {% endblock %}

@@ -1,41 +1,42 @@
 {% extends 'base.html' %}
-
-{% block title %}Home - News Agency{% endblock %}
-
+{% block title %}Home{% endblock %}
 {% block content %}
-  <div class="text-center">
+  <div class="jumbotron bg-info text-white text-center">
     <h1>Welcome to the News Agency</h1>
-    <div class="row mt-4">
-      <div class="col-md-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <h5 class="card-title">Topics</h5>
-            <p class="card-text">{{ num_topics }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <h5 class="card-title">Newspapers</h5>
-            <p class="card-text">{{ num_newspapers }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <h5 class="card-title">Redactors</h5>
-            <p class="card-text">{{ num_redactors }}</p>
-          </div>
+    <p>Stay updated with the latest news</p>
+  </div>
+
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="card shadow p-3 mb-5 bg-white rounded">
+        <div class="card-body">
+          <h5 class="card-title">{{ num_topics }}+ Topics</h5>
+          <p class="card-text"></p>
         </div>
       </div>
     </div>
-    <h3 class="mt-4">READ THE LATEST NEWS</h3>
-    <div class="list-group">
-      {% for news in news_list %}
-        <a href="#" class="list-group-item list-group-item-action">{{ news.title }} (from {{ news.published_date.date }})</a>
-      {% endfor %}
+    <div class="col-md-4">
+      <div class="card shadow p-3 mb-5 bg-white rounded">
+        <div class="card-body">
+          <h5 class="card-title">{{ num_newspapers }}+ Newspapers</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow p-3 mb-5 bg-white rounded">
+        <div class="card-body">
+          <h5 class="card-title">{{ num_redactors }}+ Redactors</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <h2>Latest News</h2>
+  <ul class="list-group">
+    {% for news in news_list %}
+      <li class="list-group-item">{{ news.title }}</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
