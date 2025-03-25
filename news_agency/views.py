@@ -13,7 +13,7 @@ def index(request: HttpRequest):
     num_topics = Topic.objects.count()
     num_redactors = Redactor.objects.count()
     num_newspapers = Newspaper.objects.count()
-    news = Newspaper.objects.all()[:5]
+    news = Newspaper.objects.all()[:3]
 
     return render(
         request,
@@ -33,3 +33,7 @@ class TopicListView(generic.ListView):
 
 class NewspaperListView(generic.ListView):
     model = Newspaper
+
+
+class RedactorListView(generic.ListView):
+    model = Redactor
