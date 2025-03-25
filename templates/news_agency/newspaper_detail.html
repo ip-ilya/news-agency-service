@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ newspaper.title }} - News Agency{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="card-title text-primary">{{ newspaper.title }}</h1>
+        <p class="text-muted">Published on {{ newspaper.published_date|date:"F d, Y" }}</p>
+        <p><strong>Topic:</strong> <a
+            href="#">{{ newspaper.topic.name }}</a></p>
+        <hr>
+        <div class="card-text" style="white-space: pre-line; word-wrap: break-word; hyphens: auto;">
+          {{ newspaper.content }}
+        </div>
+        <hr>
+        <h5>Published by:</h5>
+        <ul class="list-unstyled">
+          {% for publisher in newspaper.publishers.all %}
+            <li><i class="fas fa-user text-primary"></i> <a
+                href="{% url 'news_agency:redactor-detail' publisher.id %}">{{ publisher.first_name }} {{ publisher.last_name }}</a>
+            </li>
+          {% empty %}
+            <li>No publishers listed.</li>
+          {% endfor %}
+        </ul>
+        <a href="{% url 'news_agency:newspaper-list' %}" class="btn btn-outline-secondary mt-3">Back to Newspapers</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
