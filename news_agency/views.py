@@ -29,3 +29,7 @@ def index(request: HttpRequest):
 
 class TopicListView(generic.ListView):
     model = Topic
+
+
+class NewspaperListView(generic.ListView):
+    model = Newspaper
