@@ -25,3 +25,7 @@ def index(request: HttpRequest):
             "news_list": news
         }
     )
+
+
+class TopicListView(generic.ListView):
+    model = Topic

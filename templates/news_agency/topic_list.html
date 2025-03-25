@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Topics - News Agency{% endblock %}
+
+{% block content %}
+  <div style="text-align: center;"><h1>Topics</h1></div>
+  <div class="list-group">
+    {% for topic in topic_list %}
+      <a href="#" class="list-group-item list-group-item-action">{{ topic.name }}</a>
+    {% endfor %}
+  </div>
+{% endblock %}
