@@ -63,3 +63,11 @@ class TopicUpdateView(generic.UpdateView):
 class TopicDeleteView(generic.DeleteView):
     model = Topic
     success_url = reverse_lazy("news_agency:topic-list")
+
+
+class TopicCreateView(generic.CreateView):
+    model = Topic
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("news_agency:topic-detail", kwargs={"pk": self.object.pk})
