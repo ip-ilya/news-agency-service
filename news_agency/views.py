@@ -1,6 +1,6 @@
 from django.http import HttpRequest
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from news_agency.models import (
@@ -50,6 +50,14 @@ class TopicDetailView(generic.DetailView):
 
 class RedactorDetailView(generic.DetailView):
     model = Redactor
+
+
+class TopicUpdateView(generic.UpdateView):
+    model = Topic
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("news_agency:topic-detail", kwargs={"pk": self.object.pk})
 
 
 class TopicDeleteView(generic.DeleteView):
