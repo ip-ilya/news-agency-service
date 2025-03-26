@@ -1,5 +1,6 @@
 from django.http import HttpRequest
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from news_agency.models import (
@@ -49,3 +50,8 @@ class TopicDetailView(generic.DetailView):
 
 class RedactorDetailView(generic.DetailView):
     model = Redactor
+
+
+class TopicDeleteView(generic.DeleteView):
+    model = Topic
+    success_url = reverse_lazy("news_agency:topic-list")
