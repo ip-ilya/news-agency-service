@@ -71,3 +71,24 @@ class TopicCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse("news_agency:topic-detail", kwargs={"pk": self.object.pk})
+
+
+class NewspaperCreateView(generic.CreateView):
+    model = Newspaper
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("news_agency:newspaper-detail", kwargs={"pk": self.object.pk})
+
+
+class NewspaperUpdateView(generic.UpdateView):
+    model = Newspaper
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse("news_agency:newspaper-detail", kwargs={"pk": self.object.pk})
+
+
+class NewspaperDeleteView(generic.DeleteView):
+    model = Newspaper
+    success_url = reverse_lazy("news_agency:newspaper-list")
