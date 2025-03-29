@@ -31,10 +31,12 @@ def index(request: HttpRequest):
 
 class TopicListView(generic.ListView):
     model = Topic
+    paginate_by = 9
 
 
 class NewspaperListView(generic.ListView):
     model = Newspaper
+    paginate_by = 9
 
 
 class RedactorListView(generic.ListView):
