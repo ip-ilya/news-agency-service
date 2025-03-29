@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
+from news_agency.forms import RedactorCreationForm, RedactorUpdateForm
 from news_agency.models import (
     Topic,
     Redactor,
@@ -92,3 +93,24 @@ class NewspaperUpdateView(generic.UpdateView):
 class NewspaperDeleteView(generic.DeleteView):
     model = Newspaper
     success_url = reverse_lazy("news_agency:newspaper-list")
+
+
+class RedactorCreateView(generic.CreateView):
+    model = Redactor
+    form_class = RedactorCreationForm
+
+    def get_success_url(self):
+        return reverse("news_agency:redactor-create", kwargs={"pk": self.object.pk})
+
+
+class RedactorUpdateView(generic.UpdateView):
+    model = Redactor
+    form_class = RedactorUpdateForm
+
+    def get_success_url(self):
+        return reverse("news_agency:redactor-detail", kwargs={"pk": self.object.pk})
+
+
+class RedactorDeleteView(generic.DeleteView):
+    model = Redactor
+    success_url = reverse_lazy("news_agency:redactor-list")
