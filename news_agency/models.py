@@ -14,6 +14,11 @@ class Topic(models.Model):
 
 class Redactor(AbstractUser):
     years_of_experience = models.IntegerField()
+    bio = models.TextField(null=True, blank=True)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    instagram = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.username
