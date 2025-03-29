@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Topic(models.Model):
-    name = models.CharField(max_length=63)
+    name = models.CharField(max_length=63, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -17,15 +17,18 @@ class Redactor(AbstractUser):
     bio = models.TextField(null=True, blank=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
+    email = models.EmailField(unique=True)
     instagram = models.URLField(null=True, blank=True)
     linkedin = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.username
 
 
 class Newspaper(models.Model):
-    title = models.CharField(max_length=63)
+    title = models.CharField(max_length=63, unique=True)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     topic = models.ForeignKey(
