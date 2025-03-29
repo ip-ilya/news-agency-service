@@ -1,7 +1,8 @@
+from django.contrib.auth import get_user, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from news_agency.models import Redactor
+from news_agency.models import Redactor, Newspaper
 
 
 class RedactorCreationForm(UserCreationForm):
@@ -78,3 +79,25 @@ class NewspaperTitleSearchForm(forms.Form):
         )
 
     )
+
+
+class NewspaperCreateForm(forms.ModelForm):
+    class Meta:
+        model = Newspaper
+        fields = ("title", "content", "topic")
+
+
+class NewspaperUpdateForm(forms.ModelForm):
+    publishers = forms.ModelMultipleChoiceField(
+        queryset=get_user_model().objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    class Meta:
+        model = Newspaper
+        fields = (
+            "title",
+            "content",
+            "topic",
+            "publishers"
+        )
