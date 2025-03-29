@@ -9,13 +9,34 @@ class RedactorCreationForm(UserCreationForm):
 
     class Meta:
         model = Redactor
-        fields = UserCreationForm.Meta.fields + ("years_of_experience", "first_name", "last_name")
+        fields = UserCreationForm.Meta.fields + (
+            "first_name",
+            "last_name",
+            "email",
+            "bio",
+            "years_of_experience",
+            "instagram",
+            "linkedin",
+            "twitter",
+            "facebook"
+        )
 
 
 class RedactorUpdateForm(forms.ModelForm):
     class Meta:
         model = Redactor
-        fields = ("username", "years_of_experience", "first_name", "last_name")
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "bio",
+            "years_of_experience",
+            "instagram",
+            "linkedin",
+            "twitter",
+            "facebook"
+        )
 
 
 class TopicNameSearchForm(forms.Form):
