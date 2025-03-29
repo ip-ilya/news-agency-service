@@ -16,3 +16,44 @@ class RedactorUpdateForm(forms.ModelForm):
     class Meta:
         model = Redactor
         fields = ("username", "years_of_experience", "first_name", "last_name")
+
+
+class TopicNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=63,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by name"
+            }
+        )
+    )
+
+
+class RedactorUsernameSearchForm(forms.Form):
+    username = forms.CharField(
+        max_length=63,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by username"
+            }
+        )
+
+    )
+
+
+class NewspaperTitleSearchForm(forms.Form):
+    title = forms.CharField(
+        max_length=63,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search by title"
+            }
+        )
+
+    )

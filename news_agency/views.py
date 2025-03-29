@@ -1,9 +1,17 @@
+from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from news_agency.forms import RedactorCreationForm, RedactorUpdateForm
+from news_agency.forms import (
+    RedactorCreationForm,
+    RedactorUpdateForm,
+    TopicNameSearchForm,
+    RedactorUsernameSearchForm,
+    NewspaperTitleSearchForm
+
+)
 from news_agency.models import (
     Topic,
     Redactor,
@@ -33,14 +41,73 @@ class TopicListView(generic.ListView):
     model = Topic
     paginate_by = 9
 
+    def get_context_data(
+            self, *, object_list=..., **kwargs
+    ):
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TopicNameSearchForm(
+            initial={"name": name}
+        )
+
+        return context
+
+    def get_queryset(self):
+        queryset = Topic.objects.all()
+        name = self.request.GET.get("name")
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        return queryset
+
 
 class NewspaperListView(generic.ListView):
     model = Newspaper
     paginate_by = 9
 
+    def get_context_data(
+            self, *, object_list=..., **kwargs
+    ):
+        context = super().get_context_data(**kwargs)
+        title = self.request.GET.get("title", "")
+
+        context["search_form"] = NewspaperTitleSearchForm(
+            initial={"title": title}
+        )
+
+        return context
+
+    def get_queryset(self):
+        queryset = Newspaper.objects.all()
+        title = self.request.GET.get("title")
+        if title:
+            queryset = queryset.filter(title__contains=title)
+
+        return queryset
+
 
 class RedactorListView(generic.ListView):
     model = Redactor
+
+    def get_context_data(
+            self, *, object_list=..., **kwargs
+    ):
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = RedactorUsernameSearchForm(
+            initial={"username": username}
+        )
+
+        return context
+
+    def get_queryset(self):
+        queryset = get_user_model().objects.all()
+        username = self.request.GET.get("username")
+
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+
+        return queryset
 
 
 class NewspaperDetailView(generic.DetailView):
