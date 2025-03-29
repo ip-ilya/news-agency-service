@@ -1,15 +1,19 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import generic
+from django.core.exceptions import PermissionDenied
 
 from news_agency.forms import (
     RedactorCreationForm,
     RedactorUpdateForm,
     TopicNameSearchForm,
     RedactorUsernameSearchForm,
-    NewspaperTitleSearchForm
+    NewspaperTitleSearchForm,
+    NewspaperCreateForm,
+    NewspaperUpdateForm
 
 )
 from news_agency.models import (
@@ -17,6 +21,15 @@ from news_agency.models import (
     Redactor,
     Newspaper,
 )
+
+
+class AdminRequiredMixin(LoginRequiredMixin):
+    """Mixin to restrict access to admin users only."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 def index(request: HttpRequest):
@@ -122,7 +135,7 @@ class RedactorDetailView(generic.DetailView):
     model = Redactor
 
 
-class TopicUpdateView(generic.UpdateView):
+class TopicUpdateView(AdminRequiredMixin, generic.UpdateView):
     model = Topic
     fields = "__all__"
 
@@ -130,12 +143,12 @@ class TopicUpdateView(generic.UpdateView):
         return reverse("news_agency:topic-detail", kwargs={"pk": self.object.pk})
 
 
-class TopicDeleteView(generic.DeleteView):
+class TopicDeleteView(AdminRequiredMixin, generic.DeleteView):
     model = Topic
     success_url = reverse_lazy("news_agency:topic-list")
 
 
-class TopicCreateView(generic.CreateView):
+class TopicCreateView(AdminRequiredMixin, generic.CreateView):
     model = Topic
     fields = "__all__"
 
@@ -143,43 +156,85 @@ class TopicCreateView(generic.CreateView):
         return reverse("news_agency:topic-detail", kwargs={"pk": self.object.pk})
 
 
-class NewspaperCreateView(generic.CreateView):
+class NewspaperCreateView(LoginRequiredMixin, generic.CreateView):
     model = Newspaper
-    fields = "__all__"
+    form_class = NewspaperCreateForm
 
     def get_success_url(self):
         return reverse("news_agency:newspaper-detail", kwargs={"pk": self.object.pk})
 
+    def form_valid(self, form):
+        newspaper = form.save(commit=False)
+        newspaper.save()
+        newspaper.publishers.add(self.request.user)
+        return super().form_valid(form)
 
-class NewspaperUpdateView(generic.UpdateView):
+
+class NewspaperUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.UpdateView
+):
     model = Newspaper
-    fields = "__all__"
+    form_class = NewspaperUpdateForm
 
     def get_success_url(self):
         return reverse("news_agency:newspaper-detail", kwargs={"pk": self.object.pk})
 
+    def test_func(self):
+        newspaper = self.get_object()
+        user = self.request.user
+        return user.is_staff or (user in newspaper.publishers.all())
 
-class NewspaperDeleteView(generic.DeleteView):
+
+class NewspaperDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.DeleteView
+):
     model = Newspaper
     success_url = reverse_lazy("news_agency:newspaper-list")
 
+    def test_func(self):
+        newspaper = self.get_object()
+        user = self.request.user
+        return user.is_staff or (user in newspaper.publishers.all())
 
-class RedactorCreateView(generic.CreateView):
+
+class RedactorCreateView(AdminRequiredMixin, generic.CreateView):
     model = Redactor
     form_class = RedactorCreationForm
 
     def get_success_url(self):
-        return reverse("news_agency:redactor-create", kwargs={"pk": self.object.pk})
+        return reverse("news_agency:redactor-detail", kwargs={"pk": self.object.pk})
 
 
-class RedactorUpdateView(generic.UpdateView):
+class RedactorUpdateView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.UpdateView
+):
     model = Redactor
     form_class = RedactorUpdateForm
 
     def get_success_url(self):
         return reverse("news_agency:redactor-detail", kwargs={"pk": self.object.pk})
 
+    def test_func(self):
+        redactor = self.get_object()
+        user = self.request.user
+        return user.is_staff or (user.pk == redactor.pk)
 
-class RedactorDeleteView(generic.DeleteView):
+
+class RedactorDeleteView(
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+    generic.DeleteView
+):
     model = Redactor
     success_url = reverse_lazy("news_agency:redactor-list")
+
+    def test_func(self):
+        redactor = self.get_object()
+        user = self.request.user
+        return user.is_staff or (user.pk == redactor.pk)
