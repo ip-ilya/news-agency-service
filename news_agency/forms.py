@@ -13,13 +13,14 @@ class RedactorCreationForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields + (
             "first_name",
             "last_name",
+            "profile_picture",
             "email",
             "bio",
             "years_of_experience",
             "instagram",
             "linkedin",
             "twitter",
-            "facebook"
+            "facebook",
         )
 
 
@@ -30,13 +31,14 @@ class RedactorUpdateForm(forms.ModelForm):
             "username",
             "first_name",
             "last_name",
+            "profile_picture",
             "email",
             "bio",
             "years_of_experience",
             "instagram",
             "linkedin",
             "twitter",
-            "facebook"
+            "facebook",
         )
 
 
@@ -45,11 +47,7 @@ class TopicNameSearchForm(forms.Form):
         max_length=63,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by name"
-            }
-        )
+        widget=forms.TextInput(attrs={"placeholder": "Search by name"}),
     )
 
 
@@ -58,12 +56,7 @@ class RedactorUsernameSearchForm(forms.Form):
         max_length=63,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by username"
-            }
-        )
-
+        widget=forms.TextInput(attrs={"placeholder": "Search by username"}),
     )
 
 
@@ -72,32 +65,21 @@ class NewspaperTitleSearchForm(forms.Form):
         max_length=63,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search by title"
-            }
-        )
-
+        widget=forms.TextInput(attrs={"placeholder": "Search by title"}),
     )
 
 
 class NewspaperCreateForm(forms.ModelForm):
     class Meta:
         model = Newspaper
-        fields = ("title", "content", "topic")
+        fields = ("title", "content", "topics")
 
 
 class NewspaperUpdateForm(forms.ModelForm):
     publishers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        queryset=get_user_model().objects.all(), widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
         model = Newspaper
-        fields = (
-            "title",
-            "content",
-            "topic",
-            "publishers"
-        )
+        fields = ("title", "content", "topics", "publishers")

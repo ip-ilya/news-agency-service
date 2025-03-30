@@ -22,6 +22,7 @@ class Redactor(AbstractUser):
     linkedin = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
+    profile_picture = models.ImageField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.username
@@ -31,15 +32,8 @@ class Newspaper(models.Model):
     title = models.CharField(max_length=63, unique=True)
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
-    topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE,
-        related_name="newspapers"
-    )
-    publishers = models.ManyToManyField(
-        Redactor,
-        related_name="newspapers"
-    )
+    topics = models.ManyToManyField(Topic, related_name="newspapers")
+    publishers = models.ManyToManyField(Redactor, related_name="newspapers")
 
     def __str__(self) -> str:
         return self.title
