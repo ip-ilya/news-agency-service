@@ -2,11 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
-from news_agency.models import (
-    Topic,
-    Redactor,
-    Newspaper
-)
+from news_agency.models import Topic, Redactor, Newspaper
 
 
 admin.site.unregister(Group)
