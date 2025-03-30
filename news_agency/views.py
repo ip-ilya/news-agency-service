@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.core.exceptions import PermissionDenied
@@ -238,3 +239,12 @@ class RedactorDeleteView(
         redactor = self.get_object()
         user = self.request.user
         return user.is_staff or (user.pk == redactor.pk)
+
+
+class CustomLoginView(LoginView):
+    """Overrides Django's LoginView to redirect authenticated users away."""
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("news_agency:index")
+        return super().dispatch(request, *args, **kwargs)
