@@ -17,7 +17,7 @@
     <!-- Related Newspapers -->
     <div class="row mt-4">
       <div class="col-md-8 mx-auto">
-        <h3 class="mb-3">Latest Related Newspapers</h3>
+        <h3 class="mb-3">Latest Related News</h3>
         {% if topic.newspapers.all %}
           <div class="row">
             {% for newspaper in topic.newspapers.all %}
@@ -38,5 +38,18 @@
         {% endif %}
       </div>
     </div>
+
+    <!-- Delete Button -->
+    {% if user.is_superuser or user.is_staff %}
+      <div class="row mt-4">
+        <div class="col-md-8 mx-auto text-center">
+          <a href="{% url 'news_agency:topic-delete' topic.pk %}" class="btn btn-danger btn-lg shadow-sm">
+            <i class="fas fa-trash-alt"></i> Delete Topic
+          </a>
+        </div>
+      </div>
+
+    {% endif %}
+
   </div>
 {% endblock %}

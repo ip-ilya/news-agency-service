@@ -9,12 +9,17 @@
       <div class="col-md-6">
         <div class="card shadow-lg border-0">
           <div class="card-body">
-            <h2 class="text-center">{% if redactor %}Edit{% else %}Create{% endif %} Redactor</h2>
-            <form action="" method="post" class="mt-4" novalidate>
+            <h2 class="text-center">{% if redactor %}Edit Profile{% else %}Create Account{% endif %}</h2>
+            <form action="" method="post" class="mt-4" novalidate enctype="multipart/form-data">
               {% csrf_token %}
               {{ form|crispy }}
               <div class="d-flex justify-content-between">
-                <a href="#" class="btn btn-secondary">Cancel</a>
+                {% if object %}
+                  <a href="{% url 'news_agency:redactor-detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+                {% else %}
+                  <a href="{% url 'news_agency:redactor-list' %}" class="btn btn-secondary">Cancel</a>
+                {% endif %}
+
                 <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </form>

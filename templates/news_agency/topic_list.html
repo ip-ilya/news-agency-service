@@ -1,21 +1,48 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% block title %}Topics{% endblock %}
+
 {% block content %}
-  <h2>Topics</h2>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for topic in topic_list %}
-      <tr>
-        <td><a href="#">{{ topic.name }}</a></td>
-        <td>{{ topic.name }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  <div class="container">
+
+    <div class="text-center my-4 position-relative">
+      <h2>Explore Topics</h2>
+      {% if user.is_staff %}
+        <a href="{% url 'news_agency:topic-create' %}" class="btn btn-primary position-absolute"
+           style="right: 0; top: 50%; transform: translateY(-50%);">Add New Topic</a>
+      {% endif %}
+    </div>
+
+    <!-- Search Form -->
+    <div class="row justify-content-center mb-4">
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="🔎" class="btn btn-primary ">
+      </form>
+    </div>
+
+    <div class="row">
+      {% for topic in topic_list %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 rounded-lg h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
+              <h5 class="card-title">
+                <a href="{% url 'news_agency:topic-detail' topic.pk %}" class="text-dark text-decoration-none fw-bold">
+                  {{ topic.name }}
+                </a>
+              </h5>
+              <p class="card-text text-muted">{{ topic.description|truncatewords:15 }}</p>
+              <a href="{% url 'news_agency:topic-detail' topic.pk %}" class="btn btn-outline-primary btn-sm">Read
+                More</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">No topics available.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

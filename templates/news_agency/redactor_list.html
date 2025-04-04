@@ -1,21 +1,48 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% block title %}Redactors{% endblock %}
+
 {% block content %}
-  <h2>Redactors</h2>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Username</th>
-      <th>Email</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for redactor in redactor_list %}
-      <tr>
-        <td><a href="#">{{ redactor.username }}</a></td>
-        <td>{{ redactor.email }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  <div class="container">
+    <div class="text-center my-4 position-relative">
+      <h2>Meet Our Redactors</h2>
+      {% if user.is_staff %}
+        <a href="{% url 'news_agency:redactor-create' %}" class="btn btn-primary position-absolute"
+           style="right: 0; top: 50%; transform: translateY(-50%);">Add Redactor</a>
+      {% endif %}
+    </div>
+
+    <!-- Search Form -->
+    <div class="row justify-content-center mb-4">
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="🔎" class="btn btn-primary ">
+      </form>
+    </div>
+
+    <div class="row">
+      {% for redactor in redactor_list %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 rounded-lg h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-user-edit fa-3x text-primary mb-3"></i>
+              <h5 class="card-title">
+                <a href="{% url 'news_agency:redactor-detail' redactor.pk %}"
+                   class="text-dark text-decoration-none fw-bold">
+                  {{ redactor.username }}
+                </a>
+              </h5>
+              <p class="text-muted">Joined on: <strong>{{ redactor.date_joined.date }}</strong></p>
+              <a href="{% url 'news_agency:redactor-detail' redactor.pk %}"
+                 class="btn btn-outline-primary btn-sm">View Profile</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">No redactors available.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}

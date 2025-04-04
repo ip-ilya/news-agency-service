@@ -1,17 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
   <div class="container">
     <!-- Brand Name -->
-    <a class="navbar-brand fw-bold text-primary" href="{% url 'news_agency:index' %}">News Agency</a>
-
-    <!-- Login/Logout at the top right -->
-    <div class="d-flex d-lg-none">
-      <a href="#" class="btn btn-outline-primary me-2">Login</a>
-    </div>
-
-    <!-- Mobile Toggle Button -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <span class="navbar-brand fw-bold text-primary">News Agency</span>
 
     <!-- Centered Navigation Links -->
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
@@ -19,13 +9,25 @@
         <li class="nav-item"><a class="nav-link" href="{% url 'news_agency:index' %}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'news_agency:topic-list' %}">Topics</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'news_agency:newspaper-list' %}">Newspapers</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Redactors</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'news_agency:redactor-list' %}">Redactors</a></li>
       </ul>
     </div>
 
     <!-- Login/Logout Button at Top Right for Large Screens -->
-    <div class="d-none d-lg-flex">
-      <a href="#" class="btn btn-outline-primary me-2">Login</a>
+    <div class="d-none d-lg-flex ms-auto">
+      {% if user.is_authenticated %}
+        <a href="{% url 'news_agency:redactor-detail' user.pk %}">
+          <button class="btn btn-outline-primary me-3">My account</button>
+        </a>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button class="btn btn-outline-primary">Logout</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Login</a>
+      {% endif %}
+
+
     </div>
   </div>
 </nav>
