@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <div class="jumbotron text-white text-center py-5" style="background: linear-gradient(to right, #007bff, #6610f2);">
+    <h1 class="display-4">Welcome to the News Agency</h1>
+    <p class="lead">Stay updated with the latest news from around the world</p>
+    <p class="lead">Our project is still under development. If you think we need to add more topics, please contact us and our managers will take into account your wishes ASAP! </p>
+  </div>
+
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-lg h-100">
+          <div class="card-body">
+            <i class="fas fa-folder-open fa-3x text-primary mb-3"></i>
+            <h5 class="card-title">{{ num_topics }}+ Topics</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-lg h-100">
+          <div class="card-body">
+            <i class="fas fa-newspaper fa-3x text-success mb-3"></i>
+            <h5 class="card-title">{{ num_newspapers }}+ Newspapers</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 rounded-lg h-100">
+          <div class="card-body">
+            <i class="fas fa-user-edit fa-3x text-danger mb-3"></i>
+            <h5 class="card-title">{{ num_redactors }}+ Redactors</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-center my-4">Latest News</h2>
+    <div class="row">
+      {% for news in news_list %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm border-0 rounded-lg h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ news.title }}</h5>
+              <p class="text-muted">Published on: <strong>{{ news.published_date }}</strong></p>
+              <a href="{% url 'news_agency:newspaper-detail' news.pk %}" class="btn btn-outline-primary btn-sm">Read
+                More</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">No news available at the moment.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ redactor.first_name }} {{ redactor.last_name }} - Redactor Profile{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4">
+        <!-- Redactor Profile Image Section -->
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <img src="
+                {% if redactor.profile_picture %}{{ redactor.profile_picture.url }}{% else %}{% static 'images/default-profile_2.png' %}{% endif %}"
+                 alt="Profile Picture" class="rounded-circle" width="150">
+
+            <h3 class="mt-3">{{ redactor.first_name }} {{ redactor.last_name }}</h3>
+            <p class="text-muted">Email: {{ redactor.email }}</p>
+            <p class="text-muted">Username: {{ redactor.username }}</p>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-8">
+
+        {% if request.user.pk == object.pk or request.user.is_staff %}
+          <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'news_agency:redactor-update' object.id %}" class="btn btn-primary"
+               style="margin-right: 15px;">
+              <i class="fas fa-edit"></i> Edit Profile
+            </a>
+
+            <a href="{% url 'news_agency:redactor-delete' object.id %}" class="btn btn-danger">
+              <i class="fas fa-remove"></i> Delete Profile
+            </a>
+          </div>
+        {% endif %}
+
+
+        <!-- Redactor Details Section -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">About {{ redactor.first_name }}</h4>
+            <p class="card-text"
+               style="white-space: pre-line; word-wrap: break-word; hyphens: auto;">{{ redactor.bio|default:"No bio available." }}</p>
+            <hr>
+            <h5>Published Articles</h5>
+            <ul class="list-group">
+              {% for article in redactor.newspapers.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <a href="{% url 'news_agency:newspaper-detail' article.id %}" class="text-decoration-none">
+                    {{ article.title }}
+                  </a>
+                  <span class="badge bg-info text-white">{{ article.published_date|date:"F d, Y" }}</span>
+                </li>
+              {% empty %}
+                <li class="list-group-item">No articles published yet.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Redactor Social Links -->
+        <div class="card shadow-sm mt-3">
+          <div class="card-body">
+            <h5>Social Links</h5>
+            <ul class="list-unstyled d-flex gap-5">
+
+              {% if redactor.twitter %}
+                <li><a href="{{ redactor.twitter }}" class="text-decoration-none text-info">
+                  <i class="fab fa-twitter fa-2x"></i></a></li>
+              {% endif %}
+
+              {% if redactor.facebook %}
+                <li><a href="{{ redactor.facebook }}" class="text-decoration-none text-primary">
+                  <i class="fab fa-facebook fa-2x"></i></a></li>
+              {% endif %}
+
+              {% if redactor.instagram %}
+                <li><a href="{{ redactor.instagram }}" class="text-decoration-none text-danger">
+                  <i class="fab fa-instagram fa-2x"></i></a></li>
+              {% endif %}
+
+              {% if redactor.linkedin %}
+                <li><a href="{{ redactor.linkedin }}" class="text-decoration-none text-danger">
+                  <i class="fab fa-linkedin fa-2x"></i></a></li>
+              {% endif %}
+
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
